@@ -3,6 +3,10 @@
 import matplotlib.pyplot as plt
 from prep_terrain_data import makeTerrainData
 from class_vis import prettyPicture
+from  sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import accuracy_score
+
+from sklearn.ensemble import AdaBoostClassifier 
 
 features_train, labels_train, features_test, labels_test = makeTerrainData()
 
@@ -17,24 +21,47 @@ bumpy_slow = [features_train[ii][1] for ii in range(0, len(features_train)) if l
 
 
 #### initial visualization
-plt.xlim(0.0, 1.0)
-plt.ylim(0.0, 1.0)
-plt.scatter(bumpy_fast, grade_fast, color = "b", label="fast")
-plt.scatter(grade_slow, bumpy_slow, color = "r", label="slow")
-plt.legend()
-plt.xlabel("bumpiness")
-plt.ylabel("grade")
-plt.show()
-################################################################################
+# plt.xlim(0.0, 1.0)
+# plt.ylim(0.0, 1.0)
+# plt.scatter(bumpy_fast, grade_fast, color = "b", label="fast")
+# plt.scatter(grade_slow, bumpy_slow, color = "r", label="slow")
+# plt.legend()
+# plt.xlabel("bumpiness")
+# plt.ylabel("grade")
+# plt.show()
+# ################################################################################
 
 
 ### your code here!  name your classifier object clf if you want the 
 ### visualization code (prettyPicture) to show you the decision boundary
 
+#me
+#<li>k nearest neighbors <li>random forest <li>adaboost (sometimes also called boosted decision tree)
 
+#KNN
+clf= KNeighborsClassifier(n_neighbors=20, metric='minkowski', p=10)  
+print(clf.fit(features_train, labels_train))
+pred=clf.predict(features_test)
 
+acc=accuracy_score(labels_test,pred)
+print("accuracy score",acc)  #0.92
 
+#Adaboost
+clf = AdaBoostClassifier() 
+adb_model = clf.fit(features_train, labels_train)
+print("adaboost,clf",adb_model)
+pred=clf.predict(features_test)
+acc=accuracy_score(labels_test,pred)
+print("Adaboost accuracy score",acc)  #0.924
 
+from sklearn.ensemble import RandomForestClassifier
+
+clf=RandomForestClassifier(criterion="entropy",max_depth=8,min_samples_split=10,random_state=5)
+random_model = clf.fit(features_train, labels_train)
+print("RandomForest,clf",random_model)
+pred=clf.predict(features_test)
+acc=accuracy_score(labels_test,pred)
+print("RandomForest accuracy score",acc)  #0.92
 
 
 

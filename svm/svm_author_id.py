@@ -22,8 +22,36 @@ features_train, features_test, labels_train, labels_test = preprocess()
 
 #########################################################
 ### your code goes here ###
+from sklearn.svm import SVC
+print("Size of training dataset ", len(features_train))
+print("Size of Test dataset ", len(features_test))
+#features_train = features_train[:int(len(features_train)/100)]
+#labels_train = labels_train[:int(len(labels_train)/100)]
 
+#clf = SVC(kernel="linear")
+clf = SVC(kernel="rbf",C=10000.0)
+print(clf)
+t0=time()
+clf.fit(features_train, labels_train)
+print("Training Time:", round(time()-t0, 3), "s")  #
 
+t0=time()
+pred=clf.predict(features_test)
+print(pred)
+print(pred[10],pred[26],pred[50])
+#condition = pred ==1
+filtered_arr = pred[pred ==1]
+print("filtered_arr ",len(filtered_arr))
+
+print("Predicting Time:", round(time()-t0, 3), "s") 
+
+from sklearn.metrics import accuracy_score
+acc = accuracy_score(pred, labels_test)
+print("accuracy_score ",acc)   
+#c=10 Acc 0.8998862343572241
+#c=100  Acc 0.8998862343572241
+#c=1000 Acc 0.8998862343572241
+#c=10000 Acc 0.8998862343572241 Theoeretical this is with the best accuracy
 #########################################################
 
 #########################################################

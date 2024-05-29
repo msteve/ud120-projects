@@ -9,8 +9,8 @@ from outlier_cleaner import outlierCleaner
 
 
 ### load up some practice data with outliers in it
-ages = joblib.load( open("./outliers/practice_outliers_ages.pkl", "rb") )
-net_worths = joblib.load( open("./outliers/practice_outliers_net_worths.pkl", "rb") )
+ages = joblib.load( open("../outliers/practice_outliers_ages.pkl", "rb") )
+net_worths = joblib.load( open("../outliers/practice_outliers_net_worths.pkl", "rb") )
 
 
 
@@ -21,15 +21,20 @@ net_worths = joblib.load( open("./outliers/practice_outliers_net_worths.pkl", "r
 ages       = numpy.reshape( numpy.array(ages), (len(ages), 1))
 net_worths = numpy.reshape( numpy.array(net_worths), (len(net_worths), 1))
 from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
 ages_train, ages_test, net_worths_train, net_worths_test = train_test_split(ages, net_worths, test_size=0.1, random_state=42)
 
 ### fill in a regression here!  Name the regression object reg so that
 ### the plotting code below works, and you can see what your regression looks like
+reg=LinearRegression()
+reg.fit(ages_train,net_worths_train)
 
 
+print("Score Train == ",reg.score(ages_train,net_worths_train))
+print("Coef == ",reg.coef_)
+print("Intercept == ",reg.intercept_)
 
-
-
+print("Score Test == ",reg.score(ages_test,net_worths_test))
 
 
 
@@ -67,7 +72,12 @@ if len(cleaned_data) > 0:
     ### refit your cleaned data!
     try:
         reg.fit(ages, net_worths)
+
         plt.plot(ages, reg.predict(ages), color="blue")
+
+        print("New Coef == ",reg.coef_)
+        print("Score Test == ",reg.score(ages_test,net_worths_test))
+
     except NameError:
         print("You don't seem to have regression imported/created,")
         print("   or else your regression object isn't named reg")
