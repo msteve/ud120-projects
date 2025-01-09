@@ -17,6 +17,7 @@ def outlierCleaner(predictions, ages, net_worths):
 
     # Calculate the error   
     errors = (net_worths - predictions)**2
+    #print('Errors squared ',errors)
     # Create a list of tuples with age, net_worth and error
     cleaned_data = list(zip(ages, net_worths, errors))
     # Sort the list by error
