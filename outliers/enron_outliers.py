@@ -12,6 +12,7 @@ data_dict = joblib.load( open("../final_project/final_project_dataset.pkl", "rb"
 features = ["salary", "bonus"]
 #remove the TOTAL outlier
 data_dict.pop('TOTAL',0)
+data_dict.pop('LAVORATO JOHN J',0)
 
 data = featureFormat(data_dict, features)
 
@@ -24,7 +25,25 @@ print (max(data[0:len(data), 1]))
 for point in data:
     salary = point[0]
     bonus = point[1]
+    #print(salary, bonus)
     matplotlib.pyplot.scatter(salary, bonus)
+
+#     for i, label in enumerate(data_dict.keys()):
+#         matplotlib.pyplot.annotate(label[:1], (salary, bonus), textcoords="offset points", xytext=(5, 5), ha='center')
+
+# Loop through the data and annotate points
+# for label, point in data_dict.items():
+#     #print('Label:',label)
+#     #print  ('Point:',point)
+#     salary =  point['salary']
+#     bonus = point['bonus']
+#     matplotlib.pyplot.scatter(salary, bonus)
+#     #matplotlib.pyplot.annotate(label, (salary, bonus), textcoords="offset points", xytext=(5, 5), ha='center')
+#     if label.startswith('LAVO'):
+#         print('Lavon:',label)   
+#     #print('Salary:',salary)
+
+
 
 matplotlib.pyplot.xlabel("salary")
 matplotlib.pyplot.ylabel("bonus")

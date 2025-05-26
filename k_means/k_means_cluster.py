@@ -37,14 +37,57 @@ def Draw(pred, features, poi, mark_poi=False, name="image.png", f1_name="feature
 data_dict = joblib.load( open("../final_project/final_project_dataset.pkl", "rb") )
 ### there's an outlier--remove it! 
 data_dict.pop("TOTAL", 0)
+#print("Data dict keys:",data_dict)
+from sklearn.preprocessing import MinMaxScaler
+scaler = MinMaxScaler()
 
+values = [
+    person["exercised_stock_options"]
+    for person in data_dict.values()
+    if person["exercised_stock_options"] != 'NaN'
+]
+
+print("Maximum:", max(values))
+print("Minimum:", min(values))
+
+
+rescaled_values = scaler.fit_transform(numpy.array(values).reshape(-1, 1))
+print("Rescaled values:", rescaled_values)
+
+print("rescaled_values Maximum:", max(rescaled_values))
+print("rescaled_values Minimum:", min(rescaled_values))
+stock1m= 1000000
+rescaled_stock1m = scaler.transform([[stock1m]])
+print("Rescaled value for 1000000:", rescaled_stock1m)
+
+values = [
+    person["salary"]
+    for person in data_dict.values()
+    if person["salary"] != 'NaN'
+]
+
+print("Salary Maximum:", max(values))
+print("Salary Minimum:", min(values))
+
+rescaled_values = scaler.fit_transform(numpy.array(values).reshape(-1, 1))
+print("Rescaled values:", rescaled_values)
+
+print("rescaled_values Maximum:", max(rescaled_values))
+print("rescaled_values Minimum:", min(rescaled_values))
+stock200= 200000
+rescaled_sal200= scaler.transform([[stock200]])
+print("Rescaled value for 200000:", rescaled_sal200)
+
+
+exit()
 
 ### the input features we want to use 
 ### can be any key in the person-level dictionary (salary, director_fees, etc.) 
 feature_1 = "salary"
 feature_2 = "exercised_stock_options"
+feature_3= "total_payments"
 poi  = "poi"
-features_list = [poi, feature_1, feature_2]
+features_list = [poi, feature_1, feature_2,feature_3]
 data = featureFormat(data_dict, features_list )
 poi, finance_features = targetFeatureSplit( data )
 
@@ -53,13 +96,35 @@ poi, finance_features = targetFeatureSplit( data )
 ### you'll want to change this line to 
 ### for f1, f2, _ in finance_features:
 ### (as it's currently written, the line below assumes 2 features)
-for f1, f2 in finance_features:
+#for f1, f2 in finance_features:
+for f1, f2, _ in finance_features:
     plt.scatter( f1, f2 )
 plt.show()
 
+
 ### cluster here; create predictions of the cluster labels
 ### for the data and store them to a list called pred
+from sklearn.cluster import KMeans
+kmeans = KMeans(n_clusters=3, random_state=42)
+pred = kmeans.fit_predict(finance_features)
+#print(pred)
 
+
+#Just Me..
+# Plot each point with color based on POI status
+
+# for i, (f1, f2) in enumerate(finance_features):
+#     if poi[i]:
+#         plt.scatter(f1, f2, color='r', marker='*', s=100)  # POI in red with a star
+#     else:
+#         plt.scatter(f1, f2, color='b')  # non-POI in blue
+
+# plt.xlabel("Feature 1")
+# plt.ylabel("Feature 2")
+# plt.title("Clusters with POIs Highlighted")
+# plt.show()
+
+#end of Just Me
 
 
 

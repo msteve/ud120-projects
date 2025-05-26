@@ -34,6 +34,11 @@ def preprocess(words_file = "../tools/word_data.pkl", authors_file="../tools/ema
     words_file_handler = open(words_file, "rb")
     word_data = joblib.load(words_file_handler)
 
+    print("word_data length:", len(word_data))
+    print("authors length:", len(authors))
+    print("word_data[0]:", word_data[0])
+    print("authors[0]:", authors[0])
+
     ### test_size is the percentage of events assigned to the test set
     ### (remainder go into training)
     features_train, features_test, labels_train, labels_test = train_test_split(word_data, authors, test_size=0.1, random_state=42)
